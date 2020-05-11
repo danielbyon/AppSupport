@@ -27,17 +27,17 @@
 import SwiftUI
 import MessageUI
 
-struct MailComposeButton: View {
+public struct MailComposeButton<Label>: View where Label: View {
 
     @State private var isShowingComposeEmail = false
     @State private var isShowingComposeError = false
     @State private var composeResult: Result<MFMailComposeResult, Error>?
 
-    let title: String
-    let emailAddress: String
-    let subject: String
+    public let emailAddress: String
+    public let subject: String
+    public let label: Label
 
-    var body: some View {
+    public var body: some View {
         Button(action: {
             if MFMailComposeViewController.canSendMail() {
                 self.isShowingComposeEmail.toggle()
@@ -45,8 +45,7 @@ struct MailComposeButton: View {
                 self.isShowingComposeError.toggle()
             }
         }) {
-            Text(title)
-                .foregroundColor(.primary)
+            label
         }
         .sheet(isPresented: $isShowingComposeEmail) {
             MailComposeView(toRecipients: [self.emailAddress], subject: self.subject, isShowing: self.$isShowingComposeEmail, result: self.$composeResult)
@@ -56,13 +55,31 @@ struct MailComposeButton: View {
         }
     }
 
+    public init(emailAddress: String, subject: String, label: () -> Label) {
+        self.emailAddress = emailAddress
+        self.subject = subject
+        self.label = label()
+    }
+
 }
 
+public extension MailComposeButton where Label == Text {
+
+    init(title: String, emailAddress: String, subject: String) {
+        self.init(emailAddress: emailAddress, subject: subject) {
+            Text(title)
+                .foregroundColor(.primary)
+        }
+    }
+
+}
+
+#if DEBUG
 struct MailComposeButton_Previews: PreviewProvider {
     static var previews: some View {
         MailComposeButton(title: "Hello World", emailAddress: "test@example.com", subject: "Test")
     }
 }
-
+#endif
 
 #endif

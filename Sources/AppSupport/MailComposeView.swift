@@ -27,15 +27,15 @@
 import SwiftUI
 import MessageUI
 
-struct MailComposeView: UIViewControllerRepresentable {
+public struct MailComposeView: UIViewControllerRepresentable {
 
-    let toRecipients: [String]?
-    let subject: String
+    public let toRecipients: [String]?
+    public let subject: String
 
-    @Binding var isShowing: Bool
-    @Binding var result: Result<MFMailComposeResult, Error>?
+    @Binding public var isShowing: Bool
+    @Binding public var result: Result<MFMailComposeResult, Error>?
 
-    class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
+    public class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
 
         @Binding var isShowing: Bool
         @Binding var result: Result<MFMailComposeResult, Error>?
@@ -47,7 +47,7 @@ struct MailComposeView: UIViewControllerRepresentable {
             _result = result
         }
 
-        func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
             defer { isShowing = false }
             if let error = error {
                 self.result = .failure(error)
@@ -58,11 +58,11 @@ struct MailComposeView: UIViewControllerRepresentable {
 
     }
 
-    func makeCoordinator() -> Coordinator {
+    public func makeCoordinator() -> Coordinator {
         Coordinator(isShowing: $isShowing, result: $result)
     }
 
-    func makeUIViewController(context: Context) -> MFMailComposeViewController {
+    public func makeUIViewController(context: Context) -> MFMailComposeViewController {
         let controller = MFMailComposeViewController()
         controller.setToRecipients(toRecipients)
         controller.setSubject(subject)
@@ -70,7 +70,7 @@ struct MailComposeView: UIViewControllerRepresentable {
         return controller
     }
 
-    func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {
+    public func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {
 
     }
 
