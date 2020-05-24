@@ -41,7 +41,7 @@ public struct UserDefault<Value> where Value: UserDefaultPersistable {
             }
         }
         set {
-            let data = try? JSONDecoder().encode(newValue)
+            let data = try? JSONEncoder().encode(newValue)
             userDefaults.set(data, forKey: key)
         }
     }
