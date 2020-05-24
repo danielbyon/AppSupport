@@ -80,3 +80,5 @@ extension Float: UserDefaultPersistable { }
 extension Int: UserDefaultPersistable { }
 
 extension Optional: UserDefaultPersistable where Wrapped: UserDefaultPersistable { }
+
+extension String: UserDefaultPersistable { }
