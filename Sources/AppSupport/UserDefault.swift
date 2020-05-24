@@ -35,13 +35,13 @@ public struct UserDefault<Value> where Value: UserDefaultPersistable {
         get {
             guard let data = userDefaults.data(forKey: key) else { return defaultValue }
             do {
-                return try PropertyListDecoder().decode(Value.self, from: data)
+                return try JSONDecoder().decode(Value.self, from: data)
             } catch {
                 return defaultValue
             }
         }
         set {
-            let data = try? PropertyListEncoder().encode(newValue)
+            let data = try? JSONDecoder().encode(newValue)
             userDefaults.set(data, forKey: key)
         }
     }
