@@ -29,10 +29,13 @@ public struct UserDefault<Value> where Value: UserDefaultPersistable {
 
     public let key: String
     public let defaultValue: Value
+    public let userDefaults: UserDefaults
+
+    public static var userDefaults: UserDefaults = .standard
 
     public var wrappedValue: Value {
         get {
-            guard let data = UserDefaults.standard.data(forKey: key) else { return defaultValue }
+            guard let data = userDefaults.data(forKey: key) else { return defaultValue }
             do {
                 return try PropertyListDecoder().decode(Value.self, from: data)
             } catch {
@@ -41,13 +44,14 @@ public struct UserDefault<Value> where Value: UserDefaultPersistable {
         }
         set {
             let data = try? PropertyListEncoder().encode(newValue)
-            UserDefaults.standard.set(data, forKey: key)
+            userDefaults.set(data, forKey: key)
         }
     }
 
-    public init(key: String, defaultValue: Value) {
+    public init(key: String, defaultValue: Value, userDefaults: UserDefaults = Self.userDefaults) {
         self.key = key
         self.defaultValue = defaultValue
+        self.userDefaults = userDefaults
     }
 
 }
