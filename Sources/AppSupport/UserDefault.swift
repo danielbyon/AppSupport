@@ -58,6 +58,8 @@ public protocol UserDefaultPersistable: Codable { }
 
 extension Array: UserDefaultPersistable where Self.Element: UserDefaultPersistable { }
 
+extension Bool: UserDefaultPersistable { }
+
 #if os(iOS) || os(macOS)
 
 import CoreGraphics
