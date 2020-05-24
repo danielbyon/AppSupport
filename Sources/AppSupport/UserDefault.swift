@@ -31,8 +31,6 @@ public struct UserDefault<Value> where Value: UserDefaultPersistable {
     public let defaultValue: Value
     public let userDefaults: UserDefaults
 
-    public static var userDefaults: UserDefaults = .standard
-
     public var wrappedValue: Value {
         get {
             guard let data = userDefaults.data(forKey: key) else { return defaultValue }
@@ -48,7 +46,7 @@ public struct UserDefault<Value> where Value: UserDefaultPersistable {
         }
     }
 
-    public init(key: String, defaultValue: Value, userDefaults: UserDefaults = Self.userDefaults) {
+    public init(key: String, defaultValue: Value, userDefaults: UserDefaults = .standard) {
         self.key = key
         self.defaultValue = defaultValue
         self.userDefaults = userDefaults
