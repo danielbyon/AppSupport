@@ -25,19 +25,52 @@
 import Foundation
 
 @propertyWrapper
-public struct UserDefault<T> {
+public struct UserDefault<Value> where Value: UserDefaultPersistable {
 
     public let key: String
-    public let defaultValue: T
+    public let defaultValue: Value
 
-    public var wrappedValue: T {
-        get { UserDefaults.standard.object(forKey: key) as? T ?? defaultValue }
-        set { UserDefaults.standard.set(newValue, forKey: key) }
+    public var wrappedValue: Value {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: key) else { return defaultValue }
+            do {
+                return try PropertyListDecoder().decode(Value.self, from: data)
+            } catch {
+                return defaultValue
+            }
+        }
+        set {
+            let data = try? PropertyListEncoder().encode(newValue)
+            UserDefaults.standard.set(data, forKey: key)
+        }
     }
 
-    public init(key: String, defaultValue: T) {
+    public init(key: String, defaultValue: Value) {
         self.key = key
         self.defaultValue = defaultValue
     }
 
 }
+
+public protocol UserDefaultPersistable: Codable { }
+
+extension Array: UserDefaultPersistable where Self.Element: UserDefaultPersistable { }
+
+#if os(iOS) || os(macOS)
+
+import CoreGraphics
+extension CGFloat: UserDefaultPersistable { }
+
+#endif
+
+extension Data: UserDefaultPersistable { }
+
+extension Date: UserDefaultPersistable { }
+
+extension Dictionary: UserDefaultPersistable where Self.Key: UserDefaultPersistable, Self.Value: UserDefaultPersistable { }
+
+extension Double: UserDefaultPersistable { }
+
+extension Float: UserDefaultPersistable { }
+
+extension Int: UserDefaultPersistable { }
