@@ -79,6 +79,14 @@ extension Float: UserDefaultPersistable { }
 
 extension Int: UserDefaultPersistable { }
 
+extension Int8: UserDefaultPersistable { }
+
+extension Int16: UserDefaultPersistable { }
+
+extension Int32: UserDefaultPersistable { }
+
+extension Int64: UserDefaultPersistable { }
+
 extension Optional: UserDefaultPersistable where Wrapped: UserDefaultPersistable { }
 
 extension String: UserDefaultPersistable { }
