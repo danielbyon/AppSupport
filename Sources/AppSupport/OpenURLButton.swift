@@ -26,6 +26,7 @@
 
 import SwiftUI
 
+@available(iOSApplicationExtension, unavailable)
 public struct OpenURLButton<Label>: View where Label: View {
 
     public let url: URL
@@ -46,6 +47,7 @@ public struct OpenURLButton<Label>: View where Label: View {
 
 }
 
+@available(iOSApplicationExtension, unavailable)
 public extension OpenURLButton where Label == Text {
 
     init(title: String, url: URL) {
@@ -58,6 +60,7 @@ public extension OpenURLButton where Label == Text {
 }
 
 #if DEBUG
+@available(iOSApplicationExtension, unavailable)
 struct OpenURLButton_Previews: PreviewProvider {
     static var previews: some View {
         OpenURLButton(title: "Open a URL", url: URL(string: "https://example.com")!)
